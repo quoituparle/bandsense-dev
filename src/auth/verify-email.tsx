@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import './App.css'; 
+import './auth.css'
 
 function Verification () {
     const location = useLocation();

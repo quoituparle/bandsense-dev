@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
-import 'auth.css'
-import '../App.css'
+import './auth.css'
 import axios from 'axios'
 import apiClient from "../axiosConfig";
 

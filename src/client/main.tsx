@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import 'client.css'
+import './client.css'
 import axios from 'axios'
 import apiClient from "../axiosConfig";
 import type { Language, Model } from "./def";
