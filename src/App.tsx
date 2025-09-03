@@ -1,5 +1,4 @@
 import { Routes, Route } from 'react-router-dom'
-import { Routes, Route } from 'react-router-dom'
 import Login from './auth/login'
 import Registration from './auth/register'
 import Verification from './auth/verify-email'
