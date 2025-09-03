@@ -62,9 +62,13 @@ function Main() {
                 if (language) setLanguage(language);
             } catch (err) {
                 if (axios.isAxiosError(err)){
+                    if (err.response?.status === 401) {
+                        navigate('/login')
+                    } else {
                     const serverError = err.response?.data?.detail || 'Something went wrong'
                     setApiState(prev => ({...prev, error: serverError}))
-                };
+                    }
+                }
             };
         };
         fetchData()
