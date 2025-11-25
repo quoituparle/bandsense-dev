@@ -50,6 +50,7 @@ function Login() {
             if (axios.isAxiosError(err)) {
                 const status = err.response?.status;
                 const serverError = err.response?.data?.detail || 'An unknown error occurred.';
+                console.log(err.response)
                 
                 if (status === 403 ) {
                     setError("Your email is not verified. Redirecting you to verify...");
