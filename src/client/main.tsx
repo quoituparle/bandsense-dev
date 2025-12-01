@@ -383,7 +383,7 @@ function Main() {
                 <div className="container mx-auto px-6 py-4 flex items-center justify-between">
                     <div className="flex items-center gap-10">
                         <h1 className="text-2xl font-bold tracking-tight text-red-600 flex items-center gap-2">
-                            <span>IELTS™</span> <span className="text-slate-700 font-light">Scorer</span>
+                            <span>IELTS</span> <span className="text-slate-700 font-light">Scorer</span>
                         </h1>
                         <div className="hidden md:flex items-center gap-6">
                             {/* Model Selector */}
@@ -396,7 +396,7 @@ function Main() {
                                 <div className={`absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-xl ring-1 ring-black ring-opacity-5 origin-top-left transition-all duration-200 ease-out z-20 ${isModelDropdownOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'}`}>
                                     <div className="py-2">
                                         {availableModels.map(m => (
-                                            <button key={m.id} onClick={() => handleSelectModel(m.id)} className="w-full text-left block px-4 py-2.5 text-sm text-slate-700 hover:bg-orange-50 hover:text-orange-700 transition-colors">
+                                            <button key={m.id} onClick={() => handleSelectModel(m.id)} className="w-full text-left cursor-pointer block px-4 py-2.5 text-sm text-slate-700 hover:bg-orange-50 hover:text-orange-700 transition-colors">
                                                 {m.name}
                                             </button>
                                         ))}
@@ -417,7 +417,7 @@ function Main() {
                                 <div className={`absolute top-full left-0 mt-2 w-48 bg-white rounded-xl shadow-xl ring-1 ring-black ring-opacity-5 origin-top-left transition-all duration-200 ease-out z-20 ${isLangDropdownOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'}`}>
                                     <div className="py-2">
                                         {availableLanguages.map(l => (
-                                            <button key={l.code} onClick={() => {handleSelectLanguage(l.code) ; update_lang()}} className="w-full text-left block px-4 py-2.5 text-sm text-slate-700 hover:bg-orange-50 hover:text-orange-700 transition-colors">
+                                            <button key={l.code} onClick={() => {handleSelectLanguage(l.code) ; update_lang()}} className="w-full text-left block px-4 py-2.5 cursor-pointer text-sm text-slate-700 hover:bg-orange-50 hover:text-orange-700 transition-colors">
                                                 {l.name}
                                             </button>
                                         ))}
@@ -606,7 +606,7 @@ function Main() {
                                                 <button 
                                                     onClick={() => PostEssay()} 
                                                     disabled={publishLoading}
-                                                    className="md:ml-2 flex items-center gap-2 px-4 py-2 bg-slate-900 text-white text-sm font-bold rounded-lg shadow-md hover:bg-slate-700 hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                                                    className="md:ml-2 flex items-center gap-2 px-4 py-2 bg-slate-900 text-white text-sm font-bold rounded-lg shadow-md hover:bg-slate-700 hover:-translate-y-0.5 active:scale-95 cursor-pointer transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                                                 >
                                                     {publishLoading ? (
                                                         <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>

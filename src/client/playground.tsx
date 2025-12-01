@@ -41,6 +41,13 @@ interface ParsedScore {
 
 // --- Icons (Reused & New) ---
 
+// 1. 新增：房屋图标
+const HomeIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+    </svg>
+);
+
 const ChevronLeftIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" {...props}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -117,13 +124,11 @@ const ScoreBar = ({ label, score }: { label: string, score: number }) => {
 const parseScoreString = (scoreStr: string): ParsedScore | null => {
     try {
         const parsed = JSON.parse(scoreStr);
-        // Check if it matches the structure from views.py
         if (typeof parsed === 'object' && parsed !== null && 'Overall_score' in parsed) {
             return parsed as ParsedScore;
         }
         return null;
     } catch (e) {
-        // Fallback if score is just a number string or invalid JSON
         const num = parseFloat(scoreStr);
         if (!isNaN(num)) {
             return {
@@ -158,6 +163,17 @@ function Playground() {
     const [rankData, setRankData] = useState<RankData | null>(null);
     const [selectedEssay, setSelectedEssay] = useState<Essay | null>(null);
     const [rankSort, setRankSort] = useState<'score' | 'time'>('score');
+
+    // 2. 新增：通用的右上角主页按钮组件
+    const HomeFloatingButton = () => (
+        <button
+            onClick={() => navigate('/')}
+            className="fixed top-6 right-6 z-50 p-3 bg-white rounded-full shadow-lg border border-slate-200 text-slate-500 hover:text-orange-600 hover:shadow-orange-100 transition-all cursor-pointer group"
+            title="Go Home"
+        >
+            <HomeIcon className="w-6 h-6 group-hover:scale-110 transition-transform" />
+        </button>
+    );
 
     // Fetch Topics on Mount
     useEffect(() => {
@@ -219,9 +235,12 @@ function Playground() {
     // 2. Topic List View
     if (viewState === 'list') {
         return (
-            <div className="min-h-screen bg-slate-50 font-sans text-slate-800 p-6 md:p-12">
+            <div className="min-h-screen bg-slate-50 font-sans text-slate-800 p-6 md:p-12 relative">
+                 {/* 3. 应用：添加到列表页 */}
+                 <HomeFloatingButton />
+                 
                  <div className="max-w-6xl mx-auto">
-                    <header className="mb-10 text-center md:text-left">
+                    <header className="mb-10 text-center md:text-left pr-16"> {/* pr-16 避免被按钮遮挡 */}
                         <h1 className="text-3xl font-bold text-slate-900 tracking-tight flex items-center justify-center md:justify-start gap-3">
                             <span className="p-2 bg-orange-100 rounded-lg text-orange-600"><ChartBarIcon className="w-8 h-8"/></span>
                             Topic Playground
@@ -264,29 +283,32 @@ function Playground() {
     // 3. Topic Detail View
     if (viewState === 'topic_detail' && selectedTopic) {
         return (
-            <div className="min-h-screen bg-slate-50 flex flex-col">
+            <div className="min-h-screen bg-slate-50 flex flex-col relative">
+                {/* 3. 应用：添加到话题详情页 */}
+                <HomeFloatingButton />
+
                 <div className="flex-1 container mx-auto p-6 md:p-12 flex items-center justify-center">
                     <div className="bg-white w-full max-w-3xl p-8 md:p-12 rounded-3xl shadow-xl border border-slate-100 relative">
-                        <button onClick={handleBack} className="absolute top-6 left-6 p-2 rounded-full hover:bg-slate-100 text-slate-500 transition-colors">
+                        <button onClick={handleBack} className="absolute top-6 left-6 p-2 rounded-full hover:bg-slate-100 text-slate-500 transition-colors cursor-pointer">
                             <ChevronLeftIcon className="w-6 h-6" />
                         </button>
                         
                         <div className="mt-8">
                             <span className="inline-block px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-bold uppercase tracking-wide mb-4">Current Topic</span>
-                            <h2 className="text-2xl md:text-3xl font-bold text-slate-800 leading-relaxed">
+                            <h2 className="text-2xl md:text-3xl font-bold text-slate-800 leading-relaxed pr-8">
                                 {selectedTopic.topic}
                             </h2>
                         </div>
 
                         <div className="mt-12 flex flex-col sm:flex-row justify-end gap-4">
                              <button 
-                                onClick={() => navigate('/main', { 
+                                onClick={() => navigate('/', { 
                                     state: { 
                                         topicText: selectedTopic.topic, 
                                         topicId: selectedTopic.topic_id 
                                     } 
                                 })}
-                                className="flex items-center justify-center gap-3 px-8 py-4 bg-orange-600 text-white rounded-full font-bold shadow-lg hover:bg-orange-700 hover:shadow-orange-500/30 hover:-translate-y-1 transition-all active:scale-95"
+                                className="flex items-center justify-center gap-3 px-8 py-4 bg-orange-600 text-white rounded-full font-bold shadow-lg hover:bg-orange-700 hover:shadow-orange-500/30 hover:-translate-y-1 transition-all active:scale-95 cursor-pointer"
                             >
                                 <PencilIcon className="w-5 h-5" />
                                 <span>Practice This</span>
@@ -294,7 +316,7 @@ function Playground() {
 
                              <button 
                                 onClick={handleRankClick}
-                                className="flex items-center justify-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-full font-bold shadow-lg hover:bg-slate-800 hover:-translate-y-1 transition-all active:scale-95"
+                                className="flex items-center justify-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-full font-bold shadow-lg hover:bg-slate-800 hover:-translate-y-1 transition-all active:scale-95 cursor-pointer"
                             >
                                 <TrophyIcon className="w-6 h-6 text-yellow-400" />
                                 <span>View Rankings</span>
@@ -311,30 +333,32 @@ function Playground() {
         const essays = rankSort === 'score' ? rankData.score_rank : rankData.time_rank;
 
         return (
-            <div className="min-h-screen bg-slate-50 p-6 md:p-8">
+            <div className="min-h-screen bg-slate-50 p-6 md:p-8 relative">
+                 {/* 3. 应用：添加到排行榜页 */}
+                 <HomeFloatingButton />
+
                  <div className="max-w-4xl mx-auto bg-white min-h-[80vh] rounded-3xl shadow-xl border border-slate-100 overflow-hidden flex flex-col">
                     {/* Header */}
-                    <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-white/80 backdrop-blur-md sticky top-0 z-10">
-                        <button onClick={handleBack} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 font-medium transition-colors">
+                    <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-white/80 backdrop-blur-md sticky top-0 z-10 pr-16">
+                        <button onClick={handleBack} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 font-medium transition-colors cursor-pointer">
                              <ChevronLeftIcon className="w-5 h-5" /> Back to Topic
                         </button>
                         <div className="flex bg-slate-100 p-1 rounded-lg">
                             <button 
                                 onClick={() => setRankSort('score')} 
-                                className={`px-4 py-1.5 rounded-md text-sm font-semibold transition-all ${rankSort === 'score' ? 'bg-white text-orange-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                                className={`px-4 py-1.5 rounded-md text-sm font-semibold transition-all cursor-pointer ${rankSort === 'score' ? 'bg-white text-orange-600 shadow-sm' : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'}`}
                             >
                                 Score
                             </button>
                             <button 
                                 onClick={() => setRankSort('time')} 
-                                className={`px-4 py-1.5 rounded-md text-sm font-semibold transition-all ${rankSort === 'time' ? 'bg-white text-orange-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                                className={`px-4 py-1.5 rounded-md text-sm font-semibold transition-all cursor-pointer ${rankSort === 'time' ? 'bg-white text-orange-600 shadow-sm' : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'}`}
                             >
                                 Time
                             </button>
                         </div>
                     </div>
 
-                    {/* List */}
                     <div className="flex-1 overflow-y-auto p-4 space-y-3">
                         {essays.length === 0 ? (
                             <div className="text-center py-20 text-slate-400">No essays submitted yet.</div>
@@ -385,10 +409,13 @@ function Playground() {
         const overall = parsedScore ? parsedScore.Overall_score : 0;
 
         return (
-            <div className="min-h-screen bg-slate-50 p-6 md:p-8">
+            <div className="min-h-screen bg-slate-50 p-6 md:p-8 relative">
+                {/* 3. 应用：添加到文章详情页 */}
+                <HomeFloatingButton />
+
                 <div className="max-w-5xl mx-auto space-y-6">
                     {/* Header / Nav */}
-                    <button onClick={handleBack} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 font-medium transition-colors mb-4">
+                    <button onClick={handleBack} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 font-medium transition-colors mb-4 cursor-pointer">
                         <ChevronLeftIcon className="w-5 h-5" /> Back to Rankings
                     </button>
 
@@ -396,7 +423,6 @@ function Playground() {
                     {parsedScore ? (
                          <div className="bg-white rounded-3xl shadow-lg border border-slate-100 overflow-hidden">
                             <div className="bg-slate-900 p-8 text-white flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
-                                {/* Decor */}
                                 <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500 rounded-full blur-[80px] opacity-20 -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
 
                                 <div>
@@ -426,13 +452,11 @@ function Playground() {
 
                     {/* Content */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {/* Topic Column */}
                         <div className="md:col-span-1 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit">
                             <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Topic</h3>
                             <p className="text-slate-700 font-medium leading-relaxed">{selectedTopic.topic}</p>
                         </div>
 
-                        {/* Essay Column */}
                         <div className="md:col-span-2 bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
                              <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Essay Content</h3>
                              <div className="prose prose-slate max-w-none text-slate-600 leading-loose whitespace-pre-wrap font-serif">
