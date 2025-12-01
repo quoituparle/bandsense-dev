@@ -23,12 +23,6 @@ interface ScoringResponse {
     improvement: string;
 }
 
-interface PublishEssayResponse {
-    essay_id: string;
-    score: string;
-    content: string;
-}
-
 // --- Constants ---
 
 const availableLanguages: Language[] = [
@@ -291,6 +285,7 @@ function Main() {
         };
     };
 
+    // For publish essay
     const PostEssay = async () => {
         if (!topicId) {
             setApiState(p => ({...p, error: 'This essay cannot be published (No Topic ID found).'}));
@@ -305,14 +300,18 @@ function Main() {
         setApiState(p => ({...p, error: null, success: null}));
         
         try{
-            // Prepare payload for essay creation
-            // We stringify the score object as the backend expects a string for the score field (based on models.py)
-            const payload = {
-                content: essay,
-                score: JSON.stringify(apiState.score)
-            };
+            const params = {
+                Overall_score: apiState.score.Overall_score,
+                TR: apiState.score.TR,
+                LR: apiState.score.LR,
+                CC: apiState.score.CC,
+                GRA: apiState.score.GRA,
+                reason: apiState.score.reason,
+                improvement: apiState.score.improvement,
+                content: essay
+            }
 
-            await apiClient.post<PublishEssayResponse>(`/main/topic/${topicId}/essays`, payload);
+            await apiClient.post(`/main/topic/${topicId}/essays`, params);
             
             setApiState(p => ({...p, success: "Essay published to leaderboard successfully!"}));
             // Clear topicId to prevent duplicate publishing
