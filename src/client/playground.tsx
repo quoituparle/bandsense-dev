@@ -18,7 +18,7 @@ interface Essay {
     score: string;
     published_date: string;
     author?: {
-        full_name?: string;
+        username?: string;
         email?: string;
     }
 }
@@ -380,7 +380,7 @@ function Playground() {
                                             <div>
                                                 <div className="font-semibold text-slate-700 flex items-center gap-2">
                                                     <UserIcon className="w-4 h-4 text-slate-400"/>
-                                                    {e.author?.full_name || "Anonymous User"}
+                                                    {e.author?.username || "Anonymous User"}
                                                 </div>
                                                 <div className="text-xs text-slate-400 mt-0.5 flex items-center gap-1">
                                                     <ClockIcon className="w-3 h-3"/> {formatDate(e.published_date)}
@@ -410,7 +410,6 @@ function Playground() {
 
         return (
             <div className="min-h-screen bg-slate-50 p-6 md:p-8 relative">
-                {/* 3. 应用：添加到文章详情页 */}
                 <HomeFloatingButton />
 
                 <div className="max-w-5xl mx-auto space-y-6">
@@ -426,7 +425,7 @@ function Playground() {
                                 <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500 rounded-full blur-[80px] opacity-20 -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
 
                                 <div>
-                                    <h2 className="text-2xl font-bold mb-1">{selectedEssay.author?.full_name || "Anonymous"}'s Essay</h2>
+                                    <h2 className="text-2xl font-bold mb-1">{selectedEssay.author?.username || "Anonymous"}'s Essay</h2>
                                     <p className="text-slate-400 text-sm">Published on {formatDate(selectedEssay.published_date)}</p>
                                 </div>
                                 <div className="flex flex-col items-center">

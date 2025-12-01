@@ -28,7 +28,7 @@ function Registration() {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [password2, setPassword2] = useState<string>('');
-    const [full_name, setFull_name] = useState<string>('');
+    const [username, setUsername] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [passwordError, setPasswordError] = useState<string | null>(null);
@@ -38,7 +38,7 @@ function Registration() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!email.trim() || !password.trim() || !full_name.trim() || !password2.trim()) {
+        if (!email.trim() || !password.trim() || !username.trim() || !password2.trim()) {
             setError('Please fill in all required fields.');
             return;
         }
@@ -56,7 +56,7 @@ function Registration() {
         setError(null);
         
         try {
-            const data = { email, password, full_name };
+            const data = { email, password, username };
             await apiClient.post('/register/', data);
             navigate('/verify-email', { state: { email: email } });
         } catch (err) {
@@ -123,8 +123,8 @@ function Registration() {
                             <input
                                 id="full_name"
                                 type="text"
-                                value={full_name}
-                                onChange={(e) => setFull_name(e.target.value)}
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
                                 placeholder="John Doe"
                                 className="w-full pl-10 pr-3 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-400 focus:border-transparent transition"
                                 required
