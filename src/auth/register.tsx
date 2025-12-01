@@ -115,13 +115,13 @@ function Registration() {
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                      <div>
-                        <label htmlFor="full_name" className="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
+                        <label htmlFor="username" className="block text-sm font-medium text-slate-700 mb-1">username</label>
                         <div className="relative">
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                                 <UserIcon className="h-5 w-5 text-slate-400"/>
                             </span>
                             <input
-                                id="full_name"
+                                id="username"
                                 type="text"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
