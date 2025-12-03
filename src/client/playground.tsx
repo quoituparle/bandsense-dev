@@ -338,7 +338,7 @@ function Playground() {
                         ) : (
                             essays.map((e, index) => {
                                 const scoreDisplay = e.Overall_score;
-                                const username = e.user?.username || e.author?.username || "Anonymous User";
+                                const username = e.author?.username || "Anonymous User";
                                 
                                 return (
                                     <div 
