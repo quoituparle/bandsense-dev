@@ -4,6 +4,7 @@ import Registration from './auth/register'
 import Verification from './auth/verify-email'
 import Main from './client/main'
 import Playground from './client/playground'
+import LandingPage from './home'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/register" element={<Registration />} />
         <Route path="/login" element={<Login />} />
         <Route path='/verify-email' element={<Verification />} />
+        <Route path='/home' element={<LandingPage />} />
       </Routes>
     </div>
   )
