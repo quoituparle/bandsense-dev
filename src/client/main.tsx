@@ -5,8 +5,6 @@ import apiClient from "../axiosConfig";
 import type { Language, Model } from "./def";
 import './client.css'
 
-// --- Interfaces ---
-
 interface UserDetails {
     user_email: string;
     api_key: string | null;
@@ -23,8 +21,6 @@ interface ScoringResponse {
     improvement: string;
 }
 
-// --- Constants ---
-
 const availableLanguages: Language[] = [
     { code: 'English', name: 'English' },
     { code: 'French', name: 'French' },
@@ -40,7 +36,6 @@ const availableModels: Model[] = [
     { id: 'gemini-3-pro-preview', name: 'Gemini 3.0 Pro'}
 ];
 
-// --- Icons ---
 
 const GearIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
@@ -91,8 +86,6 @@ const PencilIcon = (props: React.SVGProps<SVGSVGElement>) => (
         <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
     </svg>
 );
-
-// --- Animation Components ---
 
 const AnimatedNumber = ({ value, duration = 1500 }: { value: number, duration?: number }) => {
     const [displayValue, setDisplayValue] = useState(0);
@@ -146,8 +139,6 @@ const ScoreBar = ({ label, score }: { label: string, score: number }) => {
         </div>
     );
 };
-
-// --- Main Component ---
 
 function Main() {
     const [topic, setTopic] = useState<string>('');
@@ -264,6 +255,20 @@ function Main() {
         };
     };
     
+    const handleTrySample = () => {
+        setTopic("Some people think that math is the most important for schoolchildren, while many others think that other subjects are more important. Discuss both these views and give your own opinion.");
+        setEssay(`It is often argued that mathematics is the most crucial subject for schoolchildren, while others believe that a broader range of subjects holds greater importance. Although mathematics undoubtedly plays a fundamental role in students’ academic development, I believe that other subjects are equally vital in preparing young people for a well-rounded future.
+
+On the one hand, mathematics is considered indispensable for several reasons. First, it fosters logical thinking and problem-solving skills, which are applicable not only in science-related fields but also in everyday life. For example, understanding percentages helps individuals manage personal finances and make rational decisions. Second, math forms the backbone of many high-demand careers such as engineering, data science, and finance. In a world increasingly driven by technology and algorithms, a solid foundation in mathematics gives students a competitive advantage. Therefore, supporters argue that math deserves a central role in school curriculums.
+
+On the other hand, focusing exclusively on mathematics may undermine the broader educational needs of students. Subjects such as literature, history, and the arts contribute significantly to emotional intelligence, cultural awareness, and creativity. These qualities are essential for personal development and social harmony. Moreover, practical subjects like physical education or life skills classes promote health and well-being, which are necessary for long-term success. Additionally, not all students excel in or enjoy mathematics; allowing them to explore other fields can help them discover their strengths and pursue a career aligned with their interests.
+
+In my view, no single subject should be regarded as the most important. Instead, education should aim for balance. While math is undeniably valuable, modern societies require diverse talents: scientists, artists, communicators, healthcare workers, and innovators. A curriculum that encourages students to develop both analytical and creative abilities equips them with a broader skill set to navigate an uncertain future.
+
+In conclusion, although mathematics plays a key role in developing logical skills and preparing students for technical careers, other subjects are equally important for fostering creativity, cultural understanding, and personal growth. A balanced approach to education is, therefore, the most beneficial for schoolchildren.`);
+        // Clear topic ID since this is a generic sample, not linked to the DB yet
+        setTopicId(null);
+    };
 
     const scoring = async () => {
         if (!topic.trim() && !essay.trim()) { setApiState(prev => ({ ...prev, error: "Topic and Essay fields are empty." })); return; };
@@ -515,12 +520,24 @@ function Main() {
                                 <span className="w-1.5 h-6 bg-orange-500 rounded-full inline-block"></span>
                                 Essay Topic
                             </div>
-                            {/* Practice Mode Indicator */}
-                            {topicId && (
-                                <span className="text-xs font-semibold bg-green-100 text-green-700 px-2 py-1 rounded-md flex items-center gap-1">
-                                    <PencilIcon className="w-3 h-3" /> Practice Mode
-                                </span>
-                            )}
+                            
+                            <div className="flex items-center gap-2">
+                                {/* Try Sample Button */}
+                                <button
+                                    type="button"
+                                    onClick={handleTrySample}
+                                    className="text-xs font-semibold text-orange-600 bg-orange-50 hover:bg-orange-100 px-3 py-1 rounded-full transition-colors cursor-pointer border border-orange-200"
+                                >
+                                    Try sample!
+                                </button>
+
+                                {/* Practice Mode Indicator */}
+                                {topicId && (
+                                    <span className="text-xs font-semibold bg-green-100 text-green-700 px-2 py-1 rounded-md flex items-center gap-1">
+                                        <PencilIcon className="w-3 h-3" /> Practice Mode
+                                    </span>
+                                )}
+                            </div>
                         </label>
                         <div className="relative group">
                             <textarea
@@ -544,18 +561,20 @@ function Main() {
                              <span className="w-1.5 h-6 bg-orange-500 rounded-full inline-block"></span>
                              Your Essay
                          </label>
-                         <textarea
-                            id="essay"
-                            value={essay}
-                            onChange={(e) => setEssay(e.target.value)}
-                            placeholder="Start writing your essay here..."
-                            className="w-full h-[400px] p-5 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white shadow-inner focus:ring-2 focus:ring-orange-200 focus:border-orange-400 transition-all resize-none text-slate-700 placeholder:text-slate-400 font-medium leading-relaxed"
-                        />
+                         <div className="relative group">
+                            <textarea
+                                id="essay"
+                                value={essay}
+                                onChange={(e) => setEssay(e.target.value)}
+                                placeholder="Start writing your essay here..."
+                                className="w-full h-[400px] p-5 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white shadow-inner focus:ring-2 focus:ring-orange-200 focus:border-orange-400 transition-all resize-none text-slate-700 placeholder:text-slate-400 font-medium leading-relaxed"
+                            />
                             {essay && (
                                 <button onClick={() => setEssay('')} className="absolute top-3 right-3 p-2 rounded-lg text-slate-400 hover:bg-white hover:text-red-500 hover:shadow-md transition-all cursor-pointer">
                                     <TrashIcon className="w-4 h-4"/>
                                 </button>
                             )}                        
+                        </div>
                     </div>
                     
                     {/* Action Buttons */}
