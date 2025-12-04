@@ -10,12 +10,5 @@ export default defineConfig({
     tailwindcss(),
   ],
   server: {
-    proxy: {
-      '/api': {
-        target: 'https://api.flyflypig.online',
-        changeOrigin: true, 
-        rewrite: (path) => path.replace(/^\/api/, ''), 
-      },
-    }
   }
 })
